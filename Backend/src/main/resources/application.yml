@@ -1,0 +1,47 @@
+server:
+  port: ${SERVER_PORT:8080}
+
+spring:
+  application:
+    name: documind-backend
+
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/documind}
+    username: ${DB_USERNAME:documind}
+    password: ${DB_PASSWORD:documind}
+
+  # Runs schema.sql (enables the pgvector extension) before Hibernate creates the tables.
+  sql:
+    init:
+      mode: always
+
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        jdbc:
+          batch_size: 50
+
+  servlet:
+    multipart:
+      max-file-size: ${MAX_FILE_SIZE:25MB}
+      max-request-size: ${MAX_FILE_SIZE:25MB}
+
+ollama:
+  base-url: ${OLLAMA_BASE_URL:http://localhost:11434}
+  chat-model: ${OLLAMA_CHAT_MODEL:llama3.2}
+  embedding-model: ${OLLAMA_EMBEDDING_MODEL:nomic-embed-text}
+  connect-timeout: ${OLLAMA_CONNECT_TIMEOUT:10s}
+  # Local models can be slow, especially on the first request while the model loads.
+  read-timeout: ${OLLAMA_READ_TIMEOUT:5m}
+
+documind:
+  rag:
+    chunk-size: ${RAG_CHUNK_SIZE:1000}
+    chunk-overlap: ${RAG_CHUNK_OVERLAP:200}
+    top-k: ${RAG_TOP_K:5}
+    embedding-batch-size: ${RAG_EMBEDDING_BATCH_SIZE:16}
+  cors:
+    allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:5173,http://localhost:3000}
